@@ -13,6 +13,7 @@
 #include "servicemanager.h"
 #include "services/clock.h"
 #include "services/network.h"
+#include "services/temp.h"
 
 StatusBarApp::StatusBarApp() : App("StatusBar", 0, 0, lilka::display.width(), 24) {
 }
@@ -85,11 +86,17 @@ int16_t StatusBarApp::drawIcons(lilka::Canvas* iconCanvas) {
         xOffset += 4 + 24;
     }
 
+    // Starting temp_sensor service
+    TemperatureSensor* tempSensService = ServiceManager::getInstance()->getService<TemperatureSensor>("temperature");
+    int temp_now = tempSensService->temp_now();
+
     // Draw battery
     int level = lilka::battery.readLevel();
     if (level == -1) {
         iconCanvas->draw16bitRGBBitmapWithTranColor(xOffset, 0, battery_absent_img, lilka::colors::Fuchsia, 16, 24);
         xOffset += 4 + 16;
+        iconCanvas->setCursor(xOffset, 17);
+        iconCanvas->print(String(temp_now) + "C");
     } else {
         int16_t x1 = 4, y1 = 6;
         int16_t width = 8, fullHeight = 14;
@@ -103,7 +110,8 @@ int16_t StatusBarApp::drawIcons(lilka::Canvas* iconCanvas) {
         iconCanvas->fillRect(xOffset + x1, y1 + emptyHeight, width, filledHeight, color);
         xOffset += 4 + 16;
         iconCanvas->setCursor(xOffset, 17);
-        iconCanvas->print(String(level) + "%");
+        //iconCanvas->print(String(level) + "%");
+        iconCanvas->print(String(temp_now) + "C");
         xOffset += 36;
     }
 

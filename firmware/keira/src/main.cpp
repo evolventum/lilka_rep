@@ -13,6 +13,7 @@
 #include "services/ftp.h"
 #include "apps/statusbar.h"
 #include "apps/launcher.h"
+#include "services/temp.h"
 
 AppManager* appManager = AppManager::getInstance();
 ServiceManager* serviceManager = ServiceManager::getInstance();
@@ -25,6 +26,7 @@ void setup() {
     serviceManager->addService(new ScreenshotService());
     serviceManager->addService(new TelnetService());
     serviceManager->addService(new FTPService());
+    serviceManager->addService(new TemperatureSensor());
 #ifdef LILKA_BLE
     serviceManager->addService(new KeiraBLEService());
 #endif
